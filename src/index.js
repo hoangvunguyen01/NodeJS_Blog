@@ -1,6 +1,7 @@
 const path = require('path');
 const express = require('express');
 const morgan = require('morgan');
+const methodOverride = require('method-override');
 const app = express();
 const port = 3000;
 
@@ -17,11 +18,16 @@ app.use(
     })
 );
 app.use(express.json());
-
+app.use(methodOverride('_method'));
 // app.use(morgan('combined'))
 
 const exphbs = require('express-handlebars');
-const hbs = exphbs.create({ extname: '.hbs' });
+const hbs = exphbs.create({
+    extname: '.hbs',
+    helpers: {
+        sum: (a, b) => a + b,
+    },
+});
 // TEMPLATE ENGINE
 app.engine('hbs', hbs.engine);
 app.set('view engine', 'hbs');
