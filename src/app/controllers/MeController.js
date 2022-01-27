@@ -12,16 +12,15 @@ class MeController {
             )
             .catch(next);
     }
-
-    // [POST] /store
-    store(req, res, next) {
-        const formData = req.body;
-        formData.image = `https://i.ytimg.com/vi/${formData.videoId}/sddefault.jpg`;
-        const course = new Course(formData);
-        course
-            .save()
-            .then(() => res.redirect('/'))
-            .catch((error) => {});
+    // [GET] /trash/courses
+    trashCourses(req, res, next) {
+        Course.findDeleted({})
+            .then((courses) =>
+                res.render('me/trash-courses', {
+                    courses: mutipleMongooseToObject(courses),
+                })
+            )
+            .catch(next);
     }
 }
 module.exports = new MeController();
